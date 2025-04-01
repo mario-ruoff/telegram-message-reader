@@ -1,7 +1,7 @@
 # Telegram Keyword Finder
 
 ## Task
-- Find all messages in channel "Neues aus Russland" from 24.02.2022 to 24.02.2023
+- Find all messages in selected channels
 - Filter messages with keywords list
 - Analyse filter effectiveness
 - Mark self-posted messages and forwarded messages
