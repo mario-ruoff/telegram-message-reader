@@ -1,6 +1,7 @@
 from telethon.sync import TelegramClient
 from datetime import datetime, timezone
 from dotenv import load_dotenv
+import pandas as pd
 import os
 import csv
 
@@ -20,15 +21,21 @@ csv_file = "messages_full.csv"
 with TelegramClient("anon", api_id, api_hash) as client:
     messages = client.iter_messages(channel_username, offset_date=start_date, reverse=True)
 
-    # Open CSV file and write messages
-    with open(csv_file, "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(["date", "sender", "is_reply", "forward", "bot", "message"])  # Header
+    # Create a list to store message data
+    message_data = []
 
-        for msg in messages:
-            if msg.date > end_date:
-                break
-            sender = msg.sender_id if msg.sender_id else "Unknown"
-            writer.writerow([msg.date, sender, msg.is_reply, msg.forward, msg.via_bot, msg.text])
+    for msg in messages:
+        if msg.date > end_date:
+            break
+        sender = msg.sender_id if msg.sender_id else "Unknown"
+        message_data.append([msg.date, sender, msg.is_reply, msg.forward != None, msg.text])
 
-print(f"Messages saved to {csv_file}")
+    # Create a DataFrame from the message data
+    df = pd.DataFrame(message_data, columns=["date", "sender", "is_reply", "forward", "message"])
+
+    # Replace \n
+    df['message'] = df['message'].str.replace('\n', '|', regex=False)
+    print(df)
+
+    # Export to CSV
+    df.to_csv(csv_file, index=False)
