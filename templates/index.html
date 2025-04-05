@@ -40,8 +40,14 @@
       </div>
 
       <div class="flex justify-center">
-        <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Filter Messages
+        <button type="submit" id="submitButton" disabled class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+          <span id="buttonText">Filter Messages</span>
+          <span id="loadingSpinner" class="hidden inline-block ml-2">
+            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+            </svg>
+          </span>
         </button>
       </div>
     </form>
@@ -69,7 +75,27 @@
       input.addEventListener('change', function() {
         const fileName = this.files && this.files.length > 0 ? this.files[0].name : "Drag & drop or click to upload";
         this.parentElement.querySelector('span').textContent = fileName;
+        checkFilesUploaded();
       });
+    });
+
+    function checkFilesUploaded() {
+      const messagesFile = document.getElementById('messages_file');
+      const keywordsFile = document.getElementById('keywords_file');
+      const submitButton = document.getElementById('submitButton');
+      if (messagesFile.files.length > 0 && keywordsFile.files.length > 0) {
+        submitButton.disabled = false;
+      } else {
+        submitButton.disabled = true;
+      }
+    }
+
+    // Disable submit button and show loading animation on form submission
+    document.querySelector('form').addEventListener('submit', function() {
+      const submitButton = document.getElementById('submitButton');
+      submitButton.disabled = true;
+      document.getElementById('buttonText').textContent = "Loading...";
+      document.getElementById('loadingSpinner').classList.remove('hidden');
     });
   </script>
 </body>

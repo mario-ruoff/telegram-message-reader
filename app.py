@@ -3,9 +3,9 @@ import pandas as pd
 import os
 
 app = Flask(__name__)
-app.secret_key = "secret-key"  # Replace with a secure key in production
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret")
 
-FILTERED_CSV = "messages_filtered.csv"
+FILTERED_CSV = "/tmp/messages_filtered.csv"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
