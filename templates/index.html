@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Message Filter Upload</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container mt-5">
+    <h2 class="mb-4">Upload Files for Message Filtering</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-danger">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="messages_file">Messages CSV File (messages_full.csv)</label>
+            <input type="file" name="messages_file" id="messages_file" class="form-control-file" required>
+        </div>
+        <div class="form-group">
+            <label for="keywords_file">Keywords Text File (keywords.txt)</label>
+            <input type="file" name="keywords_file" id="keywords_file" class="form-control-file" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Filter Messages</button>
+    </form>
+</div>
+</body>
+</html>

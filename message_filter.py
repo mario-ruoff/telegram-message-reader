@@ -11,6 +11,7 @@ print(df)
 keywords_file = 'keywords.txt'  # Replace with the actual path to your keywords file
 with open(keywords_file, 'r') as f:
     keywords = [line.strip() for line in f]
+print(keywords)
 
 # Filter the DataFrame based on the 'message' column containing any of the keywords
 filtered_df = df[df['message'].str.contains('|'.join(keywords), case=False, na=False)]
