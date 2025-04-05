@@ -1,33 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Message Filter Upload</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <title>Message Filter Upload</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <h2 class="mb-4">Upload Files for Message Filtering</h2>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+  <div class="max-w-4xl mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-6">Upload Files for Message Filtering</h2>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <div class="alert alert-danger">
+        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
           {% for message in messages %}
             <p>{{ message }}</p>
           {% endfor %}
         </div>
       {% endif %}
     {% endwith %}
-    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="messages_file">Messages CSV File (messages_full.csv)</label>
-            <input type="file" name="messages_file" id="messages_file" class="form-control-file" required>
+
+    <form action="{{ url_for('index') }}" method="post" enctype="multipart/form-data" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Messages File -->
+        <div>
+          <label for="messages_file" class="block font-semibold mb-2">Messages File (CSV)</label>
+          <label for="messages_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 bg-white text-gray-500 text-center" id="messagesLabel">
+            <span class="text-sm">Drag & drop or click to upload</span>
+            <input id="messages_file" name="messages_file" type="file" accept=".csv" required class="hidden" />
+          </label>
         </div>
-        <div class="form-group">
-            <label for="keywords_file">Keywords Text File (keywords.txt)</label>
-            <input type="file" name="keywords_file" id="keywords_file" class="form-control-file" required>
+
+        <!-- Keywords File -->
+        <div>
+          <label for="keywords_file" class="block font-semibold mb-2">Keywords File (TXT)</label>
+          <label for="keywords_file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 bg-white text-gray-500 text-center" id="keywordsLabel">
+            <span class="text-sm">Drag & drop or click to upload</span>
+            <input id="keywords_file" name="keywords_file" type="file" accept=".txt" required class="hidden" />
+          </label>
         </div>
-        <button type="submit" class="btn btn-primary">Filter Messages</button>
+      </div>
+
+      <div class="flex justify-center">
+        <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          Filter Messages
+        </button>
+      </div>
     </form>
-</div>
+
+    {% if table_html %}
+      <hr class="my-6">
+      <h3 class="text-xl font-semibold mb-4 flex justify-between items-center">
+        Filtered Messages
+        {% if download_link %}
+          <a href="{{ download_link }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
+            Download CSV File
+          </a>
+        {% endif %}
+      </h3>
+      <div class="overflow-x-auto bg-white shadow rounded p-4">
+        {{ table_html|safe }}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Inline JavaScript to update file upload labels -->
+  <script>
+    // Update label text with the selected file name
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener('change', function() {
+        const fileName = this.files && this.files.length > 0 ? this.files[0].name : "Drag & drop or click to upload";
+        this.parentElement.querySelector('span').textContent = fileName;
+      });
+    });
+  </script>
 </body>
 </html>
