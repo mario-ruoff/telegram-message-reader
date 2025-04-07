@@ -55,18 +55,16 @@
     {% if table_html %}
       <hr class="my-6">
       <h3 class="text-xl font-semibold mb-4 flex justify-between items-center">
-        <span>Filtered Messages</span> <!-- Text aligned left -->
+        Filtered Messages
         {% if download_link_filtered %}
-          <div class="flex space-x-4"> <!-- This div groups the links to the right -->
-            <a href="{{ download_link_filtered }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
-              Download CSV File
-            </a>
-            <a href="{{ download_link_keywords }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
-              Download Keywords File
-            </a>
-          </div>
+          <a href="{{ download_link_filtered }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
+            Download CSV File
+          </a>
+          <a href="{{ download_link_keywords }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded hover:bg-green-700">
+            Download Keywords File
+          </a>
         {% endif %}
-      </h3>      
+      </h3>
       <div class="overflow-x-auto bg-white shadow rounded p-4">
         {{ table_html|safe }}
       </div>
